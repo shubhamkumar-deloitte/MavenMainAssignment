@@ -227,7 +227,7 @@ public class MainPage<htmlReporter> {
         withDrawInputElement.sendKeys(withDrawAmount);
         WebElement withDrawBtnElement=driver.findElement(withDrawBtn);
         WebElement errorTextElement=driver.findElement(errorText);
-        String actulaErrorMessage="Transacton Failed. You can not withdraw amount more than the balance.";
+        String actulaErrorMessage="Transaction Failed. You can not withdraw amount more than the balance.";
         if(withDrawAmt>balance1){
             withDrawBtnElement.click();
             String errorMessage=errorTextElement.getText();
