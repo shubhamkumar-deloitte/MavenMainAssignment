@@ -44,7 +44,7 @@ public class LoginPageTest {
         //driver.findElement(By.xpath("//div[@class='center']/child::button[1]")).click();
     }
     @Test(priority = 3)
-    public void addCustomerDetails() throws IOException {
+    public void addCustomerDetails() throws IOException, InterruptedException {
 
         //driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[1]/input")).click();
         //driver.findElement(By.xpath("//input[@class='form-control ng-pristine ng-invalid ng-invalid-required ng-touched']")).sendKeys("shubham");
@@ -53,10 +53,21 @@ public class LoginPageTest {
 //        driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[3]/input")).sendKeys("sdcsh");
 
         mainPage=new MainPage(driver);
-
-        mainPage.addCustomerDetails();
         mainPage.readCustomerDetails();
+        mainPage.addCustomerDetails();
 
+        Thread.sleep(1000);
+
+        driver.switchTo().alert().accept();
+
+        Thread.sleep(1000);
+
+    }
+    @Test(priority = 4)
+    public void openAccount() throws InterruptedException {
+        Thread.sleep(2000);
+        mainPage=new MainPage(driver);
+        mainPage.setOpenAccount();
     }
 //    @AfterSuite
 //    public void tearDown(){
