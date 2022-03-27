@@ -1,4 +1,10 @@
 package Pages;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import org.apache.commons.codec.binary.StringUtils;
 import org.openqa.selenium.support.ui.Select;
 import org.apache.bcel.generic.Visitor;
@@ -9,13 +15,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.testng.Assert;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class MainPage {
+public class MainPage<htmlReporter> {
 
     WebDriver driver;
     //homepage
@@ -49,7 +57,13 @@ public class MainPage {
     By withDraw=By.xpath("//button[@ng-click='withdrawl()']");
     By withDrawInput=By.xpath("//form[@name='myForm']/child::div/child::input");
     By withDrawBtn=By.xpath("//button[@type='submit']");
+
+    By errorText=By.xpath("//*[@class='container-fluid mainBox ng-scope']/child::div[1]/child::span");
+    By getTransactionBtn=By.xpath("//button[@ng-click='transactions()']");
+    By numberOftransaction=By.xpath("//*[@ng-repeat='tx in transactions | orderBy:sortType:sortReverse | sDate:startDate:end']");
     public static int numberOfTransactions=0;
+//******************************************************************************************************************
+
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
@@ -206,23 +220,49 @@ public class MainPage {
         WebElement withDrawElement= driver.findElement(withDraw);
         withDrawElement.click();
         Thread.sleep(1000);
-        String withDrawAmount="76";
+        String withDrawAmount="6";
         int withDrawAmt=Integer.parseInt(withDrawAmount);
         WebElement withDrawInputElement=driver.findElement(withDrawInput);
         withDrawInputElement.sendKeys(withDrawAmount);
         WebElement withDrawBtnElement=driver.findElement(withDrawBtn);
-        withDrawBtnElement.click();
-        numberOfTransactions++;
+        WebElement errorTextElement=driver.findElement(errorText);
+        String actulaErrorMessage="Transaction Failed. You can not withdraw amount more than the balance.";
+        if(withDrawAmt>balance1){
+            withDrawBtnElement.click();
+            String errorMessage=errorTextElement.getText();
+            Assert.assertEquals(actulaErrorMessage,errorMessage);
 
-        int curbal=getCurrentBalance();
-        if(balance1-withDrawAmt==curbal)
-        {
-            System.out.println("balance updated after withdrawing");
-        }else
-        {
-            throw new Exception("balanced do not updated");
+        }else{
+            withDrawBtnElement.click();
+            numberOfTransactions++;
+
+            int curbal=getCurrentBalance();
+            if(balance1-withDrawAmt==curbal)
+            {
+                System.out.println("balance updated after withdrawing");
+            }else
+            {
+                throw new Exception("balanced do not updated");
+            }
+            System.out.println("total transactions are"+numberOfTransactions);
         }
-        System.out.println("total transactions are"+numberOfTransactions);
+
+
+    }
+    public void verifyTransaction() throws InterruptedException {
+
+        WebElement getTransactionBtnElement=driver.findElement(getTransactionBtn);
+        getTransactionBtnElement.click();
+        Thread.sleep(1000);
+        driver.navigate().refresh();
+        Thread.sleep(2000);
+        List<WebElement>transaction=driver.findElements(By.xpath("//*[@ng-repeat='tx in transactions | orderBy:sortType:sortReverse | sDate:startDate:end']"));
+
+        System.out.println("no of transaction in list is "+transaction.size());
+        System.out.println("transaction count made by me is "+numberOfTransactions);
+
+        Assert.assertEquals(numberOfTransactions,transaction.size());
+
 
     }
 }

@@ -1,6 +1,10 @@
 package Tests;
 
 import Pages.MainPage;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,6 +15,8 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 
 public class LoginPageTest {
+    ExtentHtmlReporter htmlReporter;
+    ExtentReports extent;
 
     WebDriver driver;
 
@@ -19,6 +25,14 @@ public class LoginPageTest {
 
     @BeforeSuite
     public void setup() throws InterruptedException {
+
+
+        // start reporters
+        htmlReporter = new ExtentHtmlReporter("extent.html");
+
+        // create ExtentReports and attach reporter(s)
+        extent = new ExtentReports();
+        extent.attachReporter(htmlReporter);
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\shubhamkumar32\\Downloads\\chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
@@ -29,8 +43,18 @@ public class LoginPageTest {
     @Test(priority = 1)
     public void bankManagerLogin() throws InterruptedException {
 
+        // creates a toggle for the given test, adds all log events under it
+        ExtentTest test = extent.createTest("MyFirstTest", "Sample description");
+
         mainPage = new MainPage(driver);
         mainPage.bankManagerLoginClick();
+        test.pass("navigates to google");
+
+        // log(Status, details)
+        test.log(Status.INFO, "This step shows usage of log(status, details)");
+
+        // info(details)
+        test.info("This step shows usage of info(details)");
         Thread.sleep(2000);
         //driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[1]/div[2]/button")).click();
     }
@@ -81,8 +105,14 @@ public class LoginPageTest {
         mainPage=new MainPage(driver);
         mainPage.makeWithdraw();
     }
-//    @AfterSuite
-//    public void tearDown(){
-//        driver.quit();
-//    }
+    @Test(priority = 8)
+    public void verifyTransaction() throws InterruptedException {
+        mainPage=new MainPage(driver);
+        mainPage.verifyTransaction();
+    }
+    @AfterSuite
+    public void tearDown(){
+        extent.flush();
+        driver.quit();
+    }
 }
