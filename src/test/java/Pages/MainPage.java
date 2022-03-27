@@ -1,6 +1,5 @@
 package Pages;
-
-//import org.apache.bcel.generic.Select;
+import org.apache.commons.codec.binary.StringUtils;
 import org.openqa.selenium.support.ui.Select;
 import org.apache.bcel.generic.Visitor;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -24,7 +23,8 @@ public class MainPage {
     //add customer
     By addCustomerBtn = By.xpath("//div[@class='center']/child::button[1]");
     //customer input fields
-    By customerFirstName = By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[1]/input");
+    ///html/body/div/div/div[2]/div/div[2]/div/div/form/div[1]/input
+    By customerFirstName = By.xpath("//form[@name='myForm']/child::div[1]/input");
     By customerLastName = By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[2]/input");
     By customerPostCode = By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[3]/input");
     By getAddCustomerBtnAfterDetails = By.xpath("//button[@class='btn btn-default']");
@@ -35,8 +35,14 @@ public class MainPage {
     //open account
     By openAccount = By.xpath("/html/body/div/div/div[2]/div/div[1]/button[2]");
     By customerNameDropDown = By.xpath("//select[@id='userSelect']");
-    String customerFullName;
-
+    By currencyDropDown=By.xpath("//select[@id='currency']");
+    By process=By.xpath("//button[@type='submit']");
+    String customerFullName="Shubham Kumar";
+    By home=By.xpath("//button[@class='btn home']");
+    By customerLoginBtn=By.xpath("//div[@class='borderM box padT20']/child::div[1]/button");
+    By login=By.xpath("//div[@class='form-group']/following::button");
+    //transaction page
+    By depositBtn=By.xpath("//button[@ng-click='deposit()']");
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
@@ -76,15 +82,12 @@ public class MainPage {
                     customerPostCodevalue = cell.getNumericCellValue();
                 }
             }
-            customerFullName=customerFirstNameValue+customerLastnameValue;
+
         }
         int value = (int) customerPostCodevalue;
         customerPostCodeStringValue = String.valueOf(value);
 
-//        System.out.println("printing customer details");
-//        System.out.println("fisrt name is "+customerFirstNameValue);
-//        System.out.println("last name is "+customerLastnameValue);
-//        System.out.println("postal code is"+customerPostCodevalue);
+
 
     }
 
@@ -108,9 +111,8 @@ public class MainPage {
         //checking whether the name is present in the dropDown or not
         WebElement customerNameDropDownELement = driver.findElement(customerNameDropDown);
         Select customerName = new Select(driver.findElement(customerNameDropDown));
-//        customerName.selectByVisibleText("Shubham Kumar");
 
-
+        System.out.println("customer full name is "+customerFullName);
         boolean found = false;
         List<WebElement> allOptions = customerName.getOptions();
         for (int i = 0; i < allOptions.size(); i++) {
@@ -123,11 +125,41 @@ public class MainPage {
         }
         if (found) {
             System.out.println("Value exists");
+            customerName.selectByVisibleText(customerFullName);
         }else{
             System.out.println("customer name not found");
         }
-        System.out.println("customer full name is "+customerFullName);
+        //handling currency drop down
+        WebElement currencyDropDownElement= driver.findElement(currencyDropDown);
+        Select currency=new Select(driver.findElement(currencyDropDown));
+        currency.selectByVisibleText("Rupee");
+        WebElement processELement= driver.findElement(process);
+        processELement.click();
+        driver.switchTo().alert().accept();
+        Thread.sleep(2000);
 
+
+    }
+
+    public void customerLogin() throws InterruptedException {
+        WebElement homeElement=driver.findElement(home);
+        homeElement.click();
+        Thread.sleep(1000);
+        WebElement customerLoginBtnELement= driver.findElement(customerLoginBtn);
+        customerLoginBtnELement.click();
+        Thread.sleep(1000);
+
+        Select name=new Select(driver.findElement(customerNameDropDown));
+        name.selectByVisibleText(customerFullName);
+
+        WebElement loginElement= driver.findElement(login);
+        loginElement.click();
+        Thread.sleep(2000);
+
+    }
+    public void makeDepositAndVerify(){
+        WebElement depositBtnElement= driver.findElement(depositBtn);
+        depositBtnElement.click();
     }
 }
 

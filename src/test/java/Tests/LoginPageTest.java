@@ -41,16 +41,12 @@ public class LoginPageTest {
         mainPage.addCustomerBtnClick();
         Thread.sleep(2000);
 
-        //driver.findElement(By.xpath("//div[@class='center']/child::button[1]")).click();
+
     }
     @Test(priority = 3)
     public void addCustomerDetails() throws IOException, InterruptedException {
 
-        //driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[1]/input")).click();
-        //driver.findElement(By.xpath("//input[@class='form-control ng-pristine ng-invalid ng-invalid-required ng-touched']")).sendKeys("shubham");
-//        driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[1]/input")).sendKeys("sadas");
-//        driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[2]/input")).sendKeys("shjcbsd");
-//        driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[3]/input")).sendKeys("sdcsh");
+
 
         mainPage=new MainPage(driver);
         mainPage.readCustomerDetails();
@@ -68,6 +64,14 @@ public class LoginPageTest {
         Thread.sleep(2000);
         mainPage=new MainPage(driver);
         mainPage.setOpenAccount();
+    }
+    @Test(priority = 5)
+    public void customerLogin() throws InterruptedException {
+        mainPage=new MainPage(driver);
+        mainPage.customerLogin();
+    }
+    public void makeDepositAndVerifyTransaction(){
+
     }
 //    @AfterSuite
 //    public void tearDown(){
