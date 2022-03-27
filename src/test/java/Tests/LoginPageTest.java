@@ -70,8 +70,16 @@ public class LoginPageTest {
         mainPage=new MainPage(driver);
         mainPage.customerLogin();
     }
-    public void makeDepositAndVerifyTransaction(){
+    @Test(priority = 6)
+    public void makeDepositAndVerifyTransaction() throws Exception {
 
+        mainPage=new MainPage(driver);
+        mainPage.makeDepositAndVerify();
+    }
+    @Test(priority = 7)
+    public void makeWithDraw() throws Exception {
+        mainPage=new MainPage(driver);
+        mainPage.makeWithdraw();
     }
 //    @AfterSuite
 //    public void tearDown(){

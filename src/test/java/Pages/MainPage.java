@@ -43,6 +43,13 @@ public class MainPage {
     By login=By.xpath("//div[@class='form-group']/following::button");
     //transaction page
     By depositBtn=By.xpath("//button[@ng-click='deposit()']");
+    By depositInput=By.xpath("//input[@ng-model='amount']");
+    By makeDepositBtn=By.xpath("//button[@class='btn btn-default']");
+    By currentBalanceInfo=By.xpath("//div[@class='borderM box padT20 ng-scope']/child::div[2]/child::strong[2]");
+    By withDraw=By.xpath("//button[@ng-click='withdrawl()']");
+    By withDrawInput=By.xpath("//form[@name='myForm']/child::div/child::input");
+    By withDrawBtn=By.xpath("//button[@type='submit']");
+    public static int numberOfTransactions=0;
 
     public MainPage(WebDriver driver) {
         this.driver = driver;
@@ -157,9 +164,66 @@ public class MainPage {
         Thread.sleep(2000);
 
     }
-    public void makeDepositAndVerify(){
+    public void makeDepositAndVerify() throws Exception {
         WebElement depositBtnElement= driver.findElement(depositBtn);
         depositBtnElement.click();
+        Thread.sleep(2000);
+        String balanceBeforeDeposit=driver.findElement(By.xpath("//div[@class='borderM box padT20 ng-scope']/child::div[2]/child::strong[2]")).getText();
+        String depositAmount="12";
+        WebElement depositInputElement= driver.findElement(depositInput);
+
+        depositInputElement.sendKeys(depositAmount);
+        WebElement makeDepositBtnElement= driver.findElement(makeDepositBtn);
+        makeDepositBtnElement.click();
+        numberOfTransactions++;
+        System.out.println("number of trans" + numberOfTransactions);
+
+        int balBeforeDeposit=Integer.parseInt(balanceBeforeDeposit);
+        int depAmount=Integer.parseInt(depositAmount);
+
+        String balanceAfterDeposit=driver.findElement(By.xpath("//div[@class='borderM box padT20 ng-scope']/child::div[2]/child::strong[2]")).getText();
+        int balAfterDeposit=Integer.parseInt(balanceAfterDeposit);
+        if(balBeforeDeposit+depAmount==balAfterDeposit){
+            System.out.println("transaction verified");
+        }else{
+            throw new Exception("amount not updated");
+        }
+
+
+    }
+
+    public int getCurrentBalance(){
+
+        WebElement curBalanceElement= driver.findElement(currentBalanceInfo);
+        String currentBalance=curBalanceElement.getText();
+        int curBal=Integer.parseInt(currentBalance);
+
+        return curBal;
+    }
+
+    public void makeWithdraw() throws Exception {
+        int balance1=getCurrentBalance();
+        WebElement withDrawElement= driver.findElement(withDraw);
+        withDrawElement.click();
+        Thread.sleep(1000);
+        String withDrawAmount="76";
+        int withDrawAmt=Integer.parseInt(withDrawAmount);
+        WebElement withDrawInputElement=driver.findElement(withDrawInput);
+        withDrawInputElement.sendKeys(withDrawAmount);
+        WebElement withDrawBtnElement=driver.findElement(withDrawBtn);
+        withDrawBtnElement.click();
+        numberOfTransactions++;
+
+        int curbal=getCurrentBalance();
+        if(balance1-withDrawAmt==curbal)
+        {
+            System.out.println("balance updated after withdrawing");
+        }else
+        {
+            throw new Exception("balanced do not updated");
+        }
+        System.out.println("total transactions are"+numberOfTransactions);
+
     }
 }
 
