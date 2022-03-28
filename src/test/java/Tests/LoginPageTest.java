@@ -1,6 +1,7 @@
 package Tests;
 
 import Pages.MainPage;
+import Pages.TransactionPage;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
@@ -28,6 +29,7 @@ public class LoginPageTest {
 
     String HomeUrl = "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login";
     MainPage mainPage;
+    TransactionPage transactionPage;
 
     @BeforeSuite
     public void setup() throws InterruptedException {
@@ -107,20 +109,20 @@ public class LoginPageTest {
     @Test(priority = 6)
     public void makeDepositAndVerifyTransaction() throws Exception {
 
-        mainPage = new MainPage(driver);
-        mainPage.makeDepositAndVerify();
+        transactionPage=new TransactionPage(driver);
+        transactionPage.makeDepositAndVerify();
     }
 
     @Test(priority = 7)
     public void makeWithDraw() throws Exception {
-        mainPage = new MainPage(driver);
-        mainPage.makeWithdraw();
+        transactionPage=new TransactionPage(driver);
+        transactionPage.makeWithdraw();
     }
 
     @Test(priority = 8)
     public void verifyTransaction() throws InterruptedException {
-        mainPage = new MainPage(driver);
-        mainPage.verifyTransaction();
+        transactionPage=new TransactionPage(driver);
+        transactionPage.verifyTransaction();
     }
 
     @AfterSuite
