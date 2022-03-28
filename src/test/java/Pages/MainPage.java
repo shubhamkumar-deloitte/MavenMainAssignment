@@ -2,26 +2,18 @@ package Pages;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
-import org.apache.commons.codec.binary.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
-import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.support.ui.Select;
-import org.apache.bcel.generic.Visitor;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.testng.Assert;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainPage<htmlReporter> {
@@ -55,26 +47,47 @@ public class MainPage<htmlReporter> {
     static int i = 1;
 //******************************************************************************************************************
 
+
     public MainPage(WebDriver driver) {
         this.driver = driver;
 
-
     }
+
+    //logger
+    private static Logger logger= LogManager.getLogger(MainPage.class);
 
     public void bankManagerLoginClick() {
 
+    logger.info("this is info message");
+        try{
+            WebElement bankManagerLoginElement = driver.findElement(bankManagerLoginBtn);
+            bankManagerLoginElement.click();
 
-        WebElement bankManagerLoginElement = driver.findElement(bankManagerLoginBtn);
-        bankManagerLoginElement.click();
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
 
     }
 
     public void addCustomerBtnClick() {
-        WebElement addCustomerBtnElement = driver.findElement(addCustomerBtn);
-        addCustomerBtnElement.click();
+
+        try{
+            WebElement addCustomerBtnElement = driver.findElement(addCustomerBtn);
+            addCustomerBtnElement.click();
+
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
+
     }
 
     public void readCustomerDetails() throws IOException {
+
+
+
+
 
         String excelFilePath = "C:\\Users\\shubhamkumar32\\Desktop\\MAIN_ASSIGNMENT_EXCEL_DATA\\Customer_Details.xlsx";
         FileInputStream fis = new FileInputStream(excelFilePath);
@@ -82,6 +95,7 @@ public class MainPage<htmlReporter> {
         XSSFSheet sheet = workbook.getSheetAt(0);
         XSSFRow row = null;
         XSSFCell cell = null;
+
 
         //iterate over all the rows and columns present in the sheet
         for (int i = 1; i < sheet.getLastRowNum(); i++) {
@@ -103,20 +117,29 @@ public class MainPage<htmlReporter> {
         int value = (int) customerPostCodevalue;
         customerPostCodeStringValue = String.valueOf(value);
 
+
     }
 
     public void addCustomerDetails() throws InterruptedException {
-        WebElement customerFisrtnameElement = driver.findElement(customerFirstName);
-        WebElement customerLastnameElement = driver.findElement(customerLastName);
-        WebElement customerPostCodeElement = driver.findElement(customerPostCode);
-        customerFisrtnameElement.sendKeys(customerFirstNameValue);
-        customerLastnameElement.sendKeys(customerLastnameValue);
-        customerPostCodeElement.sendKeys(customerPostCodeStringValue);
-        Thread.sleep(2000);
-        driver.findElement(getAddCustomerBtnAfterDetails).click();
+
+        try{
+            WebElement customerFisrtnameElement = driver.findElement(customerFirstName);
+            WebElement customerLastnameElement = driver.findElement(customerLastName);
+            WebElement customerPostCodeElement = driver.findElement(customerPostCode);
+            customerFisrtnameElement.sendKeys(customerFirstNameValue);
+            customerLastnameElement.sendKeys(customerLastnameValue);
+            customerPostCodeElement.sendKeys(customerPostCodeStringValue);
+            Thread.sleep(2000);
+            driver.findElement(getAddCustomerBtnAfterDetails).click();
+
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
     }
 
     public void setOpenAccount() throws InterruptedException {
+
 
         WebElement openAccountElement = driver.findElement(openAccount);
         openAccountElement.click();
@@ -140,8 +163,10 @@ public class MainPage<htmlReporter> {
         if (found) {
             System.out.println("Value exists");
             customerName.selectByVisibleText(customerFullName);
+
         } else {
             System.out.println("customer name not found");
+
         }
         //handling currency drop down
         WebElement currencyDropDownElement = driver.findElement(currencyDropDown);
@@ -154,19 +179,28 @@ public class MainPage<htmlReporter> {
     }
 
     public void customerLogin() throws InterruptedException {
-        WebElement homeElement = driver.findElement(home);
-        homeElement.click();
-        Thread.sleep(1000);
-        WebElement customerLoginBtnELement = driver.findElement(customerLoginBtn);
-        customerLoginBtnELement.click();
-        Thread.sleep(1000);
 
-        Select name = new Select(driver.findElement(customerNameDropDown));
-        name.selectByVisibleText(customerFullName);
 
-        WebElement loginElement = driver.findElement(login);
-        loginElement.click();
-        Thread.sleep(2000);
+        try{
+            WebElement homeElement = driver.findElement(home);
+            homeElement.click();
+            Thread.sleep(1000);
+            WebElement customerLoginBtnELement = driver.findElement(customerLoginBtn);
+            customerLoginBtnELement.click();
+            Thread.sleep(1000);
+
+            Select name = new Select(driver.findElement(customerNameDropDown));
+            name.selectByVisibleText(customerFullName);
+
+            WebElement loginElement = driver.findElement(login);
+            loginElement.click();
+            Thread.sleep(2000);
+
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
+        //extent.flush();
     }
 
 }
