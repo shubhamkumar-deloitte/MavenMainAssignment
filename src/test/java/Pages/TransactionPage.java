@@ -71,7 +71,7 @@ public class TransactionPage  {
         WebElement withDrawElement= driver.findElement(withDraw);
         withDrawElement.click();
         Thread.sleep(1000);
-        String withDrawAmount="96";
+        String withDrawAmount="6";
         int withDrawAmt=Integer.parseInt(withDrawAmount);
         WebElement withDrawInputElement=driver.findElement(withDrawInput);
         withDrawInputElement.sendKeys(withDrawAmount);

@@ -14,6 +14,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.io.FileHandler;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
@@ -60,6 +61,7 @@ public class LoginPageTest {
         mainPage.bankManagerLoginClick();
         test.pass("bank manager successfully loggedIn");
         Thread.sleep(2000);
+
 
 
     }

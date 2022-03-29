@@ -4,7 +4,7 @@
     <listeners>
         <listener class-name="Tests.TestNGListener"></listener>
     </listeners>
-    <test  name="Test1" >
+    <test  name="Test1"  >
         <classes>
             <class name="Tests.LoginPageTest">
                 
@@ -14,3 +14,5 @@
     </test>
 
 </suite>
+
+<!--        parallel="tests" thread-count="2"-->

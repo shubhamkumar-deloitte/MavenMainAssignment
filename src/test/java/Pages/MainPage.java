@@ -24,7 +24,7 @@ public class MainPage<htmlReporter> {
     //add customer
     By addCustomerBtn = By.xpath("//div[@class='center']/child::button[1]");
     //customer input fields
-    ///html/body/div/div/div[2]/div/div[2]/div/div/form/div[1]/input
+
     By customerFirstName = By.xpath("//form[@name='myForm']/child::div[1]/input");
     By customerLastName = By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[2]/input");
     By customerPostCode = By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/form/div[3]/input");
@@ -58,13 +58,15 @@ public class MainPage<htmlReporter> {
 
     public void bankManagerLoginClick() {
 
-    logger.info("this is info message");
+
         try{
             WebElement bankManagerLoginElement = driver.findElement(bankManagerLoginBtn);
             bankManagerLoginElement.click();
+            logger.info("bankManagerLoginClick test done, bank manager loggedIN");
 
         }catch (Exception e){
             e.printStackTrace();
+            logger.warn("bankManagerLoginClick test failed");
 
         }
 
@@ -75,9 +77,11 @@ public class MainPage<htmlReporter> {
         try{
             WebElement addCustomerBtnElement = driver.findElement(addCustomerBtn);
             addCustomerBtnElement.click();
+            logger.info("addCustomerBtnClick test done");
 
         }catch (Exception e){
             e.printStackTrace();
+            logger.warn("addCustomerBtnClick test case failed");
 
         }
 
@@ -85,18 +89,12 @@ public class MainPage<htmlReporter> {
 
     public void readCustomerDetails() throws IOException {
 
-
-
-
-
         String excelFilePath = "C:\\Users\\shubhamkumar32\\Desktop\\MAIN_ASSIGNMENT_EXCEL_DATA\\Customer_Details.xlsx";
         FileInputStream fis = new FileInputStream(excelFilePath);
         XSSFWorkbook workbook = new XSSFWorkbook(fis);
         XSSFSheet sheet = workbook.getSheetAt(0);
         XSSFRow row = null;
         XSSFCell cell = null;
-
-
         //iterate over all the rows and columns present in the sheet
         for (int i = 1; i < sheet.getLastRowNum(); i++) {
             row = sheet.getRow(i);
@@ -116,8 +114,6 @@ public class MainPage<htmlReporter> {
         }
         int value = (int) customerPostCodevalue;
         customerPostCodeStringValue = String.valueOf(value);
-
-
     }
 
     public void addCustomerDetails() throws InterruptedException {
@@ -131,9 +127,11 @@ public class MainPage<htmlReporter> {
             customerPostCodeElement.sendKeys(customerPostCodeStringValue);
             Thread.sleep(2000);
             driver.findElement(getAddCustomerBtnAfterDetails).click();
+            logger.info("addCustomerDetails test done, customers details added");
 
         }catch (Exception e){
             e.printStackTrace();
+            logger.warn("addCustomerDetails failed, customer details not added");
 
         }
     }
@@ -149,23 +147,24 @@ public class MainPage<htmlReporter> {
         WebElement customerNameDropDownELement = driver.findElement(customerNameDropDown);
         Select customerName = new Select(driver.findElement(customerNameDropDown));
 
-        System.out.println("customer full name is " + customerFullName);
+
         boolean found = false;
         List<WebElement> allOptions = customerName.getOptions();
         for (int i = 0; i < allOptions.size(); i++) {
-            System.out.println("priniting all options of customer name dropdown");
-            System.out.println(allOptions.get(i).getText());
+
             if (allOptions.get(i).getText().equals(customerFullName)) {
                 found = true;
                 break;
             }
         }
         if (found) {
-            System.out.println("Value exists");
+            //System.out.println("Value exists");
             customerName.selectByVisibleText(customerFullName);
+            logger.info("setOpenAccount test case and customer name found in newly added customer list");
 
         } else {
             System.out.println("customer name not found");
+            logger.info("customer name not found");
 
         }
         //handling currency drop down
@@ -194,13 +193,14 @@ public class MainPage<htmlReporter> {
 
             WebElement loginElement = driver.findElement(login);
             loginElement.click();
+            logger.info("customerLogin test case, customer able to log In");
             Thread.sleep(2000);
 
         }catch (Exception e){
             e.printStackTrace();
+            logger.warn("Customer not able to logIn");
 
         }
-        //extent.flush();
     }
 
 }
