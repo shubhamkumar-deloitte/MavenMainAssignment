@@ -36,12 +36,13 @@ public class LoginPageTest {
     public void setup() throws InterruptedException {
 
 
-//        // start reporters
-       htmlReporter = new ExtentHtmlReporter("extent.html");
-//
-//        // create ExtentReports and attach reporter(s)
-       extent = new ExtentReports();
-       extent.attachReporter(htmlReporter);
+        // start reporters
+        htmlReporter = new ExtentHtmlReporter("extent.html");
+
+        // create ExtentReports and attach reporter(s)
+        extent = new ExtentReports();
+        extent.attachReporter(htmlReporter);
+
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\shubhamkumar32\\Downloads\\chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
@@ -54,14 +55,13 @@ public class LoginPageTest {
 
         // creates a toggle for the given test, adds all log events under it
         ExtentTest test = extent.createTest("bankManagerLogin", "It will chec the login function of bank manager");
-         //nfo(details)
+        //nfo(details)
         test.info("In this test bank manager will log in into the system to add customer");
 
         mainPage = new MainPage(driver);
         mainPage.bankManagerLoginClick();
         test.pass("bank manager successfully loggedIn");
         Thread.sleep(2000);
-
 
 
     }
@@ -87,7 +87,7 @@ public class LoginPageTest {
         mainPage = new MainPage(driver);
         // creates a toggle for the given test, adds all log events under it
         ExtentTest test3 = extent.createTest("addCustomerDetails", "adding customer details");
-       test3.info("in this test case customer details will be added");
+        test3.info("in this test case customer details will be added");
         mainPage.readCustomerDetails();
         test3.info("customer details successfully read from excel");
         mainPage.addCustomerDetails();
@@ -110,7 +110,7 @@ public class LoginPageTest {
         ExtentTest test4 = extent.createTest("openAccount", "Account will be opened for newly added customer");
         mainPage = new MainPage(driver);
         mainPage.setOpenAccount();
-       test4.pass("account opened successfully for new added customer");
+        test4.pass("account opened successfully for new added customer");
     }
 
     @Test(priority = 5)
@@ -127,25 +127,29 @@ public class LoginPageTest {
     public void makeDepositAndVerifyTransaction() throws Exception {
 
         // creates a toggle for the given test, adds all log events under it
-        ExtentTest test6= extent.createTest("makeDepositAndVerifyTransaction", "Customer will desposit amount and test case will verify the amount updated or  not");
-        transactionPage=new TransactionPage(driver);
+        ExtentTest test6 = extent.createTest("makeDepositAndVerifyTransaction", "Customer will desposit amount and test case will verify the amount updated or  not");
+        transactionPage = new TransactionPage(driver);
         //test6.info("Amount will be entered oin the input and accordingly should be updated");
-        transactionPage.makeDepositAndVerify();
+         boolean flag=transactionPage.makeDepositAndVerify();
         test6.pass("Amount deposited and verified");
     }
 
     @Test(priority = 7)
     public void makeWithDraw() throws Exception {
-        ExtentTest test7= extent.createTest("makeWithDrwa", "testcase to check edge cases while withdrawing" );
+        ExtentTest test7 = extent.createTest("makeWithDraw", "testcase to check edge cases while withdrawing");
         test7.info("it will check the withdraw process and fail if withdrawing amount is more than balance");
-        transactionPage=new TransactionPage(driver);
-        transactionPage.makeWithdraw();
-        test7.pass("amount withdrawn successfully");
+        transactionPage = new TransactionPage(driver);
+        boolean flag=transactionPage.makeWithdraw();
+        if(flag==true){
+            test7.pass("amount withdrawn successfully");
+        }else{
+            test7.fail("test case failed");
+        }
     }
 
     @Test(priority = 8)
     public void verifyTransaction() throws InterruptedException {
-        transactionPage=new TransactionPage(driver);
+        transactionPage = new TransactionPage(driver);
         transactionPage.verifyTransaction();
     }
 
